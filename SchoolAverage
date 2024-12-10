@@ -1,0 +1,76 @@
+import java.io.BufferedReader;
+import java.util.Scanner;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.List;
+import java.util.ArrayList;
+
+public class SchoolAverage {
+    public static void  avg() {
+        String filename = "C:\\Users\\igorn\\IdeaProjects\\lab6\\src\\file";
+
+        Map<Integer, List<Integer>> schoolScores = new HashMap<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            int n = Integer.parseInt(reader.readLine());
+
+            for (int i = 0; i < n; i++) {
+                String line = reader.readLine();
+
+                String[] parts = line.split(" ");
+
+                String lastName = parts[0];
+                String firstName = parts[1];
+                int schoolNumber = Integer.parseInt(parts[2]);
+                int score = Integer.parseInt(parts[3]);
+
+                schoolScores.putIfAbsent(schoolNumber, new ArrayList<>());
+                schoolScores.get(schoolNumber).add(score);
+            }
+        } catch (IOException e) {
+            System.out.println("Ошибка чтения файла: " + e.getMessage());
+            System.out.println("Текущая директория: " + System.getProperty("user.dir"));
+        }
+
+        int totalScore = 0;
+        int totalStudents = 0;
+
+        for (List<Integer> scores : schoolScores.values()) {
+            for (Integer score : scores) {
+                totalScore += score;
+                totalStudents++;
+            }
+        }
+
+        double districtAverage = (double) totalScore / totalStudents;
+
+        List<Integer> schoolsAboveAverage = new ArrayList<>();
+
+        for (Map.Entry<Integer, List<Integer>> entry : schoolScores.entrySet()) {
+            int schoolNumber = entry.getKey();
+            List<Integer> scores = entry.getValue();
+
+            double schoolAverage = scores.stream()
+                    .mapToInt(Integer::intValue)
+                    .average()
+                    .orElse(0);
+
+            if (schoolAverage > districtAverage) {
+                schoolsAboveAverage.add(schoolNumber);
+            }
+        }
+
+        if (schoolsAboveAverage.isEmpty()) {
+            System.out.println("Нет школ с выше среднего баллом.");
+        } else {
+            for (int school : schoolsAboveAverage) {
+                System.out.print(school + " ");
+            }
+        }
+
+    }
+}
+
