@@ -1,0 +1,40 @@
+import java.util.ArrayDeque;
+import java.util.Deque;
+
+public class QueueEqualityChecker {
+    public static void qu() {
+        Deque<Integer> queue = new ArrayDeque<>();
+        queue.add(1);
+        queue.add(2);
+        queue.add(2);
+        queue.add(2);
+        queue.add(1);
+
+        int i = 1;
+        int j = 3;
+
+        if (isSubQueueEqual(queue, i, j)) {
+            System.out.println("Подучасток с " + i + " по " + j + " равен");
+        } else {
+            System.out.println("Подучасток с " + i + " по " + j + " не равен");
+        }
+    }
+
+    public static boolean isSubQueueEqual(Deque<Integer> queue, int i, int j) {
+        if (i < 0 || j >= queue.size() || i >= j) {
+            throw new IllegalArgumentException("Неверные индексы");
+        }
+
+        Integer[] elements = queue.toArray(new Integer[0]);
+
+        for (int index = i; index <= j; index++) {
+            if (!elements[index].equals(elements[j - (index - i)])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+}
