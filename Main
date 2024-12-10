@@ -1,0 +1,118 @@
+import java.util.Scanner;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.stream.Collectors;
+
+
+public class Main {
+    public static void main(String[] args) {
+        Main m = new Main();
+        Scanner in = new Scanner(System.in);
+
+        System.out.println("Задание 1");
+        Fraction f1 = new Fraction(1, 2);
+        Fraction f2 = new Fraction(1, 2);
+        Fraction f3 = new Fraction(2, 4);
+        System.out.println("f1 = " + f1);
+        System.out.println("f2 = " + f2);
+        System.out.println("f3 = " + f3);
+        System.out.println(f1 + " сравнить с  " + f2 + " вернет " + f1.equals(f2));
+        System.out.println(f1 + " сравнить с " + f3 + " вернет " + f1.equals(f3));
+        System.out.println(f1 + " = " + f1.getValue());
+        System.out.println("при замене числителя и знаменателя: ");
+        f1.setNumerator(3);
+        f1.setDenominator(-6);
+        System.out.println(f1 + " = " + f1.getValue());
+        System.out.println("-------------------------------------------");
+
+        System.out.println("Задание 2");
+        Cat cat1 = new Cat("Шлепа");
+        Cat cat2 = new Cat("Ричик");
+
+        Meowing meow = new MeowingImpl();
+
+        meow.makeMeow(Arrays.asList(cat1, cat2));
+        meow.makeMeow(Arrays.asList(cat1, cat2));
+        meow.makeMeow(Arrays.asList(cat1, cat2));
+        meow.makeMeow(Arrays.asList(cat1, cat2));
+        meow.makeMeow(Arrays.asList(cat1, cat2));
+
+        System.out.println(cat1 + " мяукал " + cat1.getMeowCount() + " раз(а).");
+        System.out.println(cat2 + " мяукал " + cat2.getMeowCount() + " раз(а).");
+        System.out.println("-------------------------------------------");
+
+        System.out.println("Задание 3");
+        List<Integer> L1 = new ArrayList<>();
+        L1.add(1);
+        L1.add(2);
+        L1.add(3);
+
+        List<Integer> L2 = new ArrayList<>();
+        L2.add(2);
+        L2.add(3);
+        L2.add(4);
+
+        List<Integer> L = createUniqueList(L1, L2);
+
+        System.out.println("Результат списка L: " + L);
+        System.out.println("-------------------------------------------");
+
+        System.out.println("Задание 4");
+        SchoolAverage.avg();
+        System.out.println(" ");
+        System.out.println("-------------------------------------------");
+
+        System.out.println("Задание 5");
+        FindDigitsInText.find();
+        System.out.println("-------------------------------------------");
+
+        System.out.println("Задание 6");
+        QueueEqualityChecker.qu();
+        System.out.println("-------------------------------------------");
+
+        System.out.println("Задание 7.2");
+        try {
+            Map<Integer, List<String>> result = Files.lines(Paths.get("C:\\Users\\igorn\\IdeaProjects\\lab6\\src\\file2"))
+                    .filter(line -> line.contains(":"))
+                    .map(line -> line.split(":"))
+                    .filter(parts -> parts.length == 2 && !parts[1].isEmpty())
+                    .collect(Collectors.groupingBy(
+                            parts -> Integer.parseInt(parts[1]),
+                            Collectors.mapping(parts -> capitalize(parts[0].toLowerCase()), Collectors.toList())
+                    ));
+            System.out.println(result);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static List<Integer> createUniqueList(List<Integer> L1, List<Integer> L2) {
+        Set<Integer> uniqueElements = new HashSet<>();
+
+        for (Integer element : L1) {
+            if (!L2.contains(element)) {
+                uniqueElements.add(element);
+            }
+        }
+
+        for (Integer element : L2) {
+            if (!L1.contains(element)) {
+                uniqueElements.add(element);
+            }
+        }
+
+        return new ArrayList<>(uniqueElements);
+    }
+
+    private static String capitalize(String name) {
+        return name.substring(0, 1).toUpperCase() + name.substring(1);
+    }
+}
+
